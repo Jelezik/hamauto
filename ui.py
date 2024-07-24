@@ -8,10 +8,20 @@ class Application(tk.Tk):
         self.title("HAMAUTO")
         self.geometry("400x750")
 
+        self.icon_path = "appIcon.png"
+        self.set_icon(self.icon_path)
+
         self.is_sending = False  # Флаг для контроля отправки запросов
         self.language = "ru"  # Язык по умолчанию
         self.translations = translations
         self.create_widgets()
+
+    def set_icon(self, icon_path):
+        # Метод для установки иконки приложения
+        try:
+            self.iconphoto(False, tk.PhotoImage(file=icon_path))
+        except Exception as e:
+            print(f"Не удалось установить иконку: {e}")
 
     def create_widgets(self):
         # Language Selection
