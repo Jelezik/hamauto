@@ -1,4 +1,6 @@
 import requests
+import time
+from datetime import datetime
 
 def send_post_request(url, token, data):
     headers = {
@@ -19,15 +21,18 @@ def main():
     token = input("Введите ваш Bearer token: ")
     count = int(input("Введите count: "))
     available_taps = int(input("Введите availableTaps: "))
-    timestamp = int(input("Введите timestamp: "))
+    interval = int(input("Введите интервал в минутах для отправки запроса: "))
     
-    data = {
-        "count": count,
-        "availableTaps": available_taps,
-        "timestamp": timestamp
-    }
-    
-    send_post_request(url, token, data)
+    while True:
+        timestamp = int(time.mktime(datetime.now().timetuple()))
+        data = {
+            "count": count,
+            "availableTaps": available_taps,
+            "timestamp": timestamp
+        }
+        
+        send_post_request(url, token, data)
+        time.sleep(interval * 60)
 
 if __name__ == "__main__":
     main()
