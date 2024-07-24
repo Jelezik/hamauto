@@ -7,8 +7,8 @@ from tkinter import messagebox
 class Application(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Post Request Sender")
-        self.geometry("400x500")
+        self.title("HAMAUTO")
+        self.geometry("400x600")
 
         self.is_sending = False  # Флаг для контроля отправки запросов
         
