@@ -8,7 +8,7 @@ class Application(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("HAMAUTO")
-        self.geometry("400x600")
+        self.geometry("400x700")
 
         self.is_sending = False  # Флаг для контроля отправки запросов
         
@@ -35,7 +35,7 @@ class Application(tk.Tk):
         self.interval_entry = tk.Entry(self, width=50)
         self.interval_entry.pack(pady=5)
         
-        # Start Button
+       # Start Button
         self.start_button = tk.Button(self, text="Начать отправку запросов", command=self.start_sending)
         self.start_button.pack(pady=20)
         
@@ -54,6 +54,13 @@ class Application(tk.Tk):
         self.log_label.pack()
         self.log_text = tk.Text(self.log_frame, height=10, width=50)
         self.log_text.pack()
+
+        # Clear Logs Button
+        self.clear_logs_button = tk.Button(self.log_frame, text="Очистить логи", command=self.clear_logs)
+        self.clear_logs_button.pack(pady=10)
+
+    def clear_logs(self):
+        self.log_text.delete('1.0', tk.END)
         
     def send_post_request(self, url, token, data):
         headers = {
