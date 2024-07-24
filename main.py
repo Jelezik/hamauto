@@ -8,34 +8,66 @@ class Application(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("HAMAUTO")
-        self.geometry("400x700")
+        self.geometry("400x750")
 
         self.is_sending = False  # Флаг для контроля отправки запросов
-        
+        self.language = "ru"  # Язык по умолчанию
+        self.translations = {
+            "ru": {
+                "error": "Ошибка",
+                "invalid_values": "Пожалуйста, введите корректные значения.",
+                "next_request": "Следующий запрос через: {mins:02d}:{secs:02d}",
+                "cancel_sending": "Отправка запросов отменена.\n",
+                "request_success": "{current_time} - Запрос успешно отправлен!\n",
+                "request_error": "{current_time} - Произошла ошибка: {response_status}\n"
+            },
+            "en": {
+                "error": "Error",
+                "invalid_values": "Please enter valid values.",
+                "next_request": "Next request in: {mins:02d}:{secs:02d}",
+                "cancel_sending": "Request sending canceled.\n",
+                "request_success": "{current_time} - Request sent successfully!\n",
+                "request_error": "{current_time} - An error occurred: {response_status}\n"
+            }
+        }
         self.create_widgets()
         
     def create_widgets(self):
+    # Language Selection
+        self.language_frame = tk.Frame(self)
+        self.language_frame.pack(pady=5)
+
+        self.russian_button = tk.Button(self.language_frame, text="Русский", command=lambda: self.set_language("ru"))
+        self.russian_button.pack(side=tk.LEFT, padx=5)
+
+        self.english_button = tk.Button(self.language_frame, text="English", command=lambda: self.set_language("en"))
+        self.english_button.pack(side=tk.LEFT, padx=5)
+
         # Bearer token
-        tk.Label(self, text="Bearer token:").pack(pady=5)
+        self.token_label = tk.Label(self, text="Bearer token:")
+        self.token_label.pack(pady=5)
         self.token_entry = tk.Entry(self, width=50)
         self.token_entry.pack(pady=5)
         
         # Count
-        tk.Label(self, text="Count:").pack(pady=5)
+        self.count_label = tk.Label(self, text="Количество кликов:")
+        self.count_label.pack(pady=5)
         self.count_entry = tk.Entry(self, width=50)
         self.count_entry.pack(pady=5)
         
         # Available Taps
-        tk.Label(self, text="Available Taps:").pack(pady=5)
+        self.taps_label = tk.Label(self, text="Доступные клики:")
+        self.taps_label.pack(pady=5)
         self.available_taps_entry = tk.Entry(self, width=50)
         self.available_taps_entry.pack(pady=5)
         
         # Interval
-        tk.Label(self, text="Интервал в минутах:").pack(pady=5)
+        self.interval_label = tk.Label(self, text="Интервал в минутах:")
+        self.interval_label.pack(pady=5)
         self.interval_entry = tk.Entry(self, width=50)
         self.interval_entry.pack(pady=5)
         
-       # Start Button
+        # Start Button
         self.start_button = tk.Button(self, text="Начать отправку запросов", command=self.start_sending)
         self.start_button.pack(pady=20)
         
@@ -61,6 +93,35 @@ class Application(tk.Tk):
 
     def clear_logs(self):
         self.log_text.delete('1.0', tk.END)
+
+    def set_language(self, lang):
+        self.language = lang
+        if lang == "ru":
+            self.update_labels("Bearer token:", "Количество кликов:", "Доступные клики:", "Интервал в минутах:", "Начать отправку запросов", "Отменить отправку запросов", "Лог отправки запросов:", "Очистить логи")
+        elif lang == "en":
+            self.update_labels("Bearer token:", "Count:", "Available Taps:", "Interval in minutes:", "Start Sending Requests", "Cancel Sending Requests", "Request Sending Log:", "Clear Logs")
+        
+    
+    def get_translation(self, key, **kwargs):
+        return self.translations[self.language][key].format(**kwargs)
+    
+    def update_labels(self, token_text, count_text, taps_text, interval_text, start_button_text, cancel_button_text, log_label_text, clear_logs_text):
+        if hasattr(self, 'token_label'):
+            self.token_label.config(text=token_text)
+        if hasattr(self, 'count_label'):
+            self.count_label.config(text=count_text)
+        if hasattr(self, 'taps_label'):
+            self.taps_label.config(text=taps_text)
+        if hasattr(self, 'interval_label'):
+            self.interval_label.config(text=interval_text)
+        if hasattr(self, 'start_button'):
+            self.start_button.config(text=start_button_text)
+        if hasattr(self, 'cancel_button'):
+            self.cancel_button.config(text=cancel_button_text)
+        if hasattr(self, 'log_label'):
+            self.log_label.config(text=log_label_text)
+        if hasattr(self, 'clear_logs_button'):
+            self.clear_logs_button.config(text=clear_logs_text)
         
     def send_post_request(self, url, token, data):
         headers = {
@@ -71,9 +132,9 @@ class Application(tk.Tk):
         
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         if response.status_code == 200:
-            self.log_text.insert(tk.END, f"{current_time} - Запрос успешно отправлен!\n")
+            self.log_text.insert(tk.END, self.get_translation("request_success", current_time=current_time))
         else:
-            self.log_text.insert(tk.END, f"{current_time} - Произошла ошибка: {response.status_code}\n")
+            self.log_text.insert(tk.END, self.get_translation("request_error", current_time=current_time, response_status=response.status_code))
             self.log_text.insert(tk.END, f"{response.text}\n")
         self.log_text.see(tk.END)
     
@@ -96,7 +157,8 @@ class Application(tk.Tk):
             self.send_requests(token, count, available_taps, interval, url)
         
         except ValueError:
-            messagebox.showerror("Ошибка", "Пожалуйста, введите корректные значения.")
+            messagebox.showerror(self.get_translation("error"), self.get_translation("invalid_values"))
+
     
     def send_requests(self, token, count, available_taps, interval, url):
         if not self.is_sending:
@@ -116,7 +178,7 @@ class Application(tk.Tk):
                 self.reset_ui()
                 return
             mins, secs = divmod(remaining, 60)
-            self.countdown_label.config(text=f"Следующий запрос через: {mins:02d}:{secs:02d}")
+            self.countdown_label.config(text=self.get_translation("next_request", mins=mins, secs=secs))
             self.update()
             time.sleep(1)
         
@@ -133,7 +195,7 @@ class Application(tk.Tk):
         self.interval_entry.config(state='normal')
         self.start_button.config(state='normal')
         self.countdown_label.config(text="")
-        self.log_text.insert(tk.END, "Отправка запросов отменена.\n")
+        self.log_text.insert(tk.END, self.get_translation("cancel_sending"))
         self.log_text.see(tk.END)
 
 if __name__ == "__main__":
