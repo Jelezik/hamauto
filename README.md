@@ -23,7 +23,7 @@ Introducing Hamauto. This software for Hamster Kombat will send requests to the 
 
 2. **Launch the application:**
    - **Windows:** Run the executable file `main.exe`.
-   - **MacOS:** Run the executable file `main.app`. If the file does not start, open the terminal in the project folder and execute the command `open MyApp.app`.
+   - **MacOS:** Run the executable file `main.app`. If the file does not start, open the terminal in the project folder and execute the command `open HAMAUTO.app`.
 
 3. **After launching, you should see the following window:**
 
@@ -75,7 +75,7 @@ Introducing Hamauto. This software for Hamster Kombat will send requests to the 
 
 2. **Запуск приложения:**
    - **Windows:** Запустите исполняемый файл `main.exe`.
-      - **MacOS:** Запустите исполняемый файл `main.app`. Если файл не запускается, откройте терминал в папке с проектом и выполните команду `open MyApp.app`.
+      - **MacOS:** Запустите исполняемый файл `main.app`. Если файл не запускается, откройте терминал в папке с проектом и выполните команду `open HAMAUTO.app`.
 
 3. **После запуска у вас должно открыться следующее окно:**
 
