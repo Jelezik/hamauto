@@ -50,6 +50,6 @@ MacOS:
 Имейте ввиду, иногда вы будете переходить на новый уровень и у вас могут измениться вводные данные (например максимально доступное количество кликов), будьте внимательны и в таком случае перезапустите бота, в будущем я постараюсь это автоматизировать.
 
 DL
-[Скачать файл](release/hamauto_macos.zip)
+[Скачать всю папку](https://github.com/Jelezik/hamauto/raw/main/release/hamauto_macos.zip)
 <a href="release/hamauto_macos.zip" download>MacOS</a>
 <a href="release/hamauto_windows.zip" download>Windows</a>
