@@ -51,5 +51,5 @@ MacOS:
 
 DL
 [Скачать файл](release/hamauto_macos)
-<a href="release/hamauto_macos" download>MacOS</a>
-<a href="release/hamauto_windows" download>Windows</a>
+<a href="release/hamauto_macos.zip" download>MacOS</a>
+<a href="release/hamauto_windows.zip" download>Windows</a>
